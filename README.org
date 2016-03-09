@@ -1,0 +1,35 @@
+9 Mar 2016 07:46
+
+A radical redo of org-pm, for latex and tiddlywiki.
+
+Publish an org-mode file or subtree: 
+
+1. As pdf, using latex export
+2. As a website, using TiddlyWiki 5 (Node.js version)
+   
+* Where exports are stored
+:PROPERTIES: 
+:DATE:     <2016-03-09 Wed 08:28>
+:END:
+
+** PDF
+
+PDF exports are stored in the org-attachments directory
+
+- Entire-file exports are saved in subdirectory "PDFs" of the attachments directory.  The PDF files are named after the name of the org-source file.
+- Subtree exports are saved as regular attachments to the subtree's attachment dir.  The PDF file is named after the heading of the subtree, but the user is prompted to edit the file name in the minibuffer before starting the export.
+  
+** TiddlyWiki
+
+- Each TiddlyWiki is stored as a subfolder inside the directory whose path is defined in custom variable =org-pm-wikis=.
+- The default value of =org-pm-wikis= is "WIKIS".
+- The =org-pm-wikis= directory is created in the same directory that contains the org-mode source for the exported wiki.  In this way, each directory that contains org-mode files can be a group of wikis that are exported as html pages to form a website containing many pages. 
+- The TiddlyWiki source of each wiki is stored in its own folder.
+- The user is prompted to choose or enter the name of the folder before exporting.
+- The name chosen by the user is stored in the org-mode source file to serve as default for future exports.
+- The rendered TiddlyWiki html-export files of all Wikis are stored in a separate subdirectory of the =org-pm-wikis= folder, named =rendered=.
+- The name of the rendered files is derived from the name of the directory of its wiki source.
+- The entire =org-pm-wikis= directory is a git repository.
+- The subdirectory =rendered= is used as root directory for the gh_pages branch of the git repository, so that the rendered wikis become html pages in the [[https://pages.github.com/][github-pages]] site of the git repository.
+
+
