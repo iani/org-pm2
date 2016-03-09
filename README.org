@@ -7,17 +7,23 @@ Publish an org-mode file or subtree:
 1. As a website, using TiddlyWiki 5 (Node.js version).
 2. As PDF, via LaTeX.
   
+Requires http://github.com/iani/tiddlywiki-render-template - and clones it automatically from within Emacs before the first export.
+
 * /INCOMPLETE/
 
 * TiddlyWiki
 
-** Export a file/section to a TiddlyWiki
+** Master command: Export + Render + Upload a file/section
 
-** Render a file/section to html
+: org-pm-tw-deploy
 
-** Upload all Wikis of this folder as site to github 
+** Single Steps
+*** Export a file/section to a TiddlyWiki
 
-** Export + Render + Upload a file/section
+*** Render a file/section to html
+
+*** Upload all Wikis of this folder as site to github 
+
 
 ** How to specify which sections become tiddlers
 
