@@ -7,6 +7,8 @@ Publish an org-mode file or subtree:
 1. As a website, using TiddlyWiki 5 (Node.js version).
 2. As PDF, via LaTeX.
   
+* /INCOMPLETE/
+
 * TiddlyWiki
 
 ** Export a file/section to a TiddlyWiki
