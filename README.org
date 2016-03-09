@@ -4,22 +4,70 @@ A radical redo of org-pm, for latex and tiddlywiki.
 
 Publish an org-mode file or subtree: 
 
-1. As pdf, using latex export
-2. As a website, using TiddlyWiki 5 (Node.js version)
-   
-* Where exports are stored
+1. As a website, using TiddlyWiki 5 (Node.js version).
+2. As PDF, via LaTeX.
+  
+* TiddlyWiki
+
+** Export a file/section to a TiddlyWiki
+
+** Render a file/section to html
+
+** Upload all Wikis of this folder as site to github 
+
+** Export + Render + Upload a file/section
+
+** How to specify which sections become tiddlers
+
+** Customize the looks of the site
+:PROPERTIES:
+:DATE:     <2016-03-09 Wed 14:47>
+:END:
+
+The easiest way to customize is to open the wiki on a browser and use the built-in interface of TiddlyWiki.  To do this, open a terminal and do the following: 
+
+1. Navigate to the directory of the wiki
+
+For example: 
+
+#+BEGIN_EXAMPLE
+cd ./WIKIS/template
+#+END_EXAMPLE
+
+2. Run tiddlywiki on the server folder specifying a port number of your choice.
+
+For example:
+
+#+BEGIN_EXAMPLE
+tiddlywiki server --server 8080
+#+END_EXAMPLE
+
+Choose a different port number for each wiki that you want to start while other wikis are already running.
+
+** Test rendering a wiki with shell command
+
+For testing purposes, you can try rendering a wiki to html from the command-line: 
+
+1. Navigate to the directory of the wiki
+
+For example: 
+
+#+BEGIN_EXAMPLE
+cd ./WIKIS/template
+#+END_EXAMPLE
+
+2. Run the render command of tiddlywiki specifying =rendered= as source directory and a directory of your choice as target directory.
+
+For example:
+
+#+BEGIN_EXAMPLE
+tiddlywiki ./readonly --rendertiddler $:/core/save/all ../../../../rendered/render_test.html text/plain
+#+END_EXAMPLE
+
+** Where exports are stored
 :PROPERTIES: 
 :DATE:     <2016-03-09 Wed 08:28>
 :END:
-
-** PDF
-
-PDF exports are stored in the org-attachments directory
-
-- Entire-file exports are saved in subdirectory "PDFs" of the attachments directory.  The PDF files are named after the name of the org-source file.
-- Subtree exports are saved as regular attachments to the subtree's attachment dir.  The PDF file is named after the heading of the subtree, but the user is prompted to edit the file name in the minibuffer before starting the export.
-  
-** TiddlyWiki
 
 - Each TiddlyWiki is stored as a subfolder inside the directory whose path is defined in custom variable =org-pm-wikis=.
 - The default value of =org-pm-wikis= is "WIKIS".
@@ -31,5 +79,28 @@ PDF exports are stored in the org-attachments directory
 - The name of the rendered files is derived from the name of the directory of its wiki source.
 - The entire =org-pm-wikis= directory is a git repository.
 - The subdirectory =rendered= is used as root directory for the gh_pages branch of the git repository, so that the rendered wikis become html pages in the [[https://pages.github.com/][github-pages]] site of the git repository.
+- Before exporting a file or section, prepare the directory of the org-source file by checking:
+  - Does an =org-pm-wikis= subfolder exist? If not, make one.
+  - Is the containing folder a git repository?  If not, make a repository and configure it to be a github-repository named after the name of the containing folder.  Also configure =rendered= subdirectory to be the root directory of the =gh_pages= branch.
+  - This means that the github repository of an exported org-mode file will contain all 3 elements of the export process:
+    1. The source code (in org-mode).
+    2. The TiddlyWiki source code (in tiddler markup format, as single tiddlers, plus all accompanying config files and tiddlers)
+    3. The rendered =html= file.
+
+
+
+* PDF
+:PROPERTIES:
+:DATE:     <2016-03-09 Wed 14:45>
+:END:
+** Where exports are stored
+:PROPERTIES: 
+:DATE:     <2016-03-09 Wed 08:28>
+:END:
+
+PDF exports are stored in the org-attachments directory
+
+- Entire-file exports are saved in subdirectory "PDFs" of the attachments directory.  The PDF files are named after the name of the org-source file.
+- Subtree exports are saved as regular attachments to the subtree's attachment dir.  The PDF file is named after the heading of the subtree, but the user is prompted to edit the file name in the minibuffer before starting the export.
 
 
