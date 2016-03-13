@@ -1,0 +1,39 @@
+
+#+BEGIN_SRC emacs-lisp
+  (let (tiddlers tiddler (top-end 0) (top-level 1))
+    (org-map-entries
+     '(let* ((properties (cadr (org-element-at-point)))
+             (headline (plist-get properties :raw-value))
+             (begin (plist-get properties :begin))
+             (end (plist-get properties :end))
+             (level (plist-get properties :level))
+             (is-tiddler (plist-get properties :TIDDLER)))
+        `(,headline ,begin ,end ,level ,is-tiddler))
+     ))
+
+#+END_SRC
+
+#+RESULTS:
+| chapter 1 | 539 | 631 | 1 | t   |
+| section 1 | 617 | 631 | 2 | nil |
+| Chapter 2 | 631 | 643 | 1 | nil |
+
+* chapter 1
+:PROPERTIES:
+:DATE:     <2016-03-11 Fri 10:05>
+:TIDDLER: t
+:END:
+
+Here is some initial blabla
+
+** COMMENT section 1 this section should not APPEAR!
+
+*** subsection  this one should also not appear
+
+** section 2
+
+** is visible
+
+*** is also visible
+
+* Chapter 2
