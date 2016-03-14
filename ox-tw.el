@@ -1,30 +1,15 @@
 ;;; ox-tw.el --- Markdown Back-End for Org Export Engine
 
-;; Copyright (C) 2012-2015 Free Software Foundation, Inc.
-
-;; Author: Nicolas Goaziou <n.goaziou@gmail.com>
-;; Keywords: org, wp, markdown
-
-;; This file is part of GNU Emacs.
-
-;; GNU Emacs is free software: you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation, either version 3 of the License, or
-;; (at your option) any later version.
-
-;; GNU Emacs is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-
-;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs.  If not, see <http://www.gnu.org/licenses/>.
-
 ;;; Commentary:
 
-;; This library implements a Markdown back-end (vanilla flavor) for
-;; Org exporter, based on `html' back-end.  See Org manual for more
-;; information.
+;; Adapted by IZ <zannos@gmail.com>
+;; from Nicolas Goaziou's markdown export module.
+;; <n.goaziou@gmail.com>
+;; Keywords: org, wp, markdown, tiddlywiki
+
+;; This library implements a TiddlyWiki back-end (vanilla flavor) for
+;; Org exporter, based on `html' and `markdown' back-ends.
+;; See Org manual for more information.
 
 ;;; Code:
 
@@ -36,14 +21,15 @@
 ;;; User-Configurable Variables
 
 (defgroup org-export-tw nil
-  "Options specific to Markdown export back-end."
-  :tag "Org Markdown"
+  "Options specific to TiddlyWiki export back-end."
+  :tag "Org TiddlyWiki"
   :group 'org-export
   :version "24.4"
   :package-version '(Org . "8.0"))
 
 (defcustom org-tw-headline-style 'atx
-  "Style used to format headlines.
+  "This option is not applicable to TiddlyWiki.
+Style used to format headlines in MarkDown.
 This variable can be set to either `atx' or `setext'."
   :group 'org-export-tw
   :type '(choice
@@ -54,18 +40,18 @@ This variable can be set to either `atx' or `setext'."
 
 ;;; Define Back-End
 
-(org-export-define-derived-backend 'md 'html
-  :export-block '("MD" "MARKDOWN")
+(org-export-define-derived-backend 'tw 'html
+  :export-block '("TW" "TIDDLYWIKI")
   :filters-alist '((:filter-parse-tree . org-tw-separate-elements))
   :menu-entry
-  '(?m "Export to Markdown"
+  '(?m "Export to TiddlyWiki"
        ((?M "To temporary buffer"
-	    (lambda (a s v b) (org-tw-export-as-markdown a s v)))
-	(?m "To file" (lambda (a s v b) (org-tw-export-to-markdown a s v)))
+	    (lambda (a s v b) (org-tw-export-as-tiddlywiki a s v)))
+	(?m "To file" (lambda (a s v b) (org-tw-export-to-tiddlywiki a s v)))
 	(?o "To file and open"
 	    (lambda (a s v b)
-	      (if a (org-tw-export-to-markdown t s v)
-		(org-open-file (org-tw-export-to-markdown nil s v)))))))
+	      (if a (org-tw-export-to-tiddlywiki t s v)
+		(org-open-file (org-tw-export-to-tiddlywiki nil s v)))))))
   :translate-alist '((bold . org-tw-bold)
 		     (code . org-tw-verbatim)
 		     (comment . (lambda (&rest args) ""))
@@ -134,7 +120,7 @@ Assume BACKEND is `md'."
 ;;;; Bold
 
 (defun org-tw-bold (bold contents info)
-  "Transcode BOLD object into Markdown format.
+  "Transcode BOLD object into TiddlyWiki format.
 CONTENTS is the text within bold markup.  INFO is a plist used as
 a communication channel."
   (format "**%s**" contents))
@@ -143,7 +129,7 @@ a communication channel."
 ;;;; Code and Verbatim
 
 (defun org-tw-verbatim (verbatim contents info)
-  "Transcode VERBATIM object into Markdown format.
+  "Transcode VERBATIM object into TiddlyWiki format.
 CONTENTS is nil.  INFO is a plist used as a communication
 channel."
   (let ((value (org-element-property :value verbatim)))
@@ -158,7 +144,7 @@ channel."
 ;;;; Example Block and Src Block
 
 (defun org-tw-example-block (example-block contents info)
-  "Transcode EXAMPLE-BLOCK element into Markdown format.
+  "Transcode EXAMPLE-BLOCK element into TiddlyWiki format.
 CONTENTS is nil.  INFO is a plist used as a communication
 channel."
   (replace-regexp-in-string
@@ -170,7 +156,7 @@ channel."
 ;;;; Headline
 
 (defun org-tw-headline (headline contents info)
-  "Transcode HEADLINE element into Markdown format.
+  "Transcode HEADLINE element into TiddlyWiki format.
 CONTENTS is the headline contents.  INFO is a plist used as
 a communication channel."
   (unless (org-element-property :footnote-section-p headline)
@@ -228,7 +214,7 @@ a communication channel."
 ;;;; Horizontal Rule
 
 (defun org-tw-horizontal-rule (horizontal-rule contents info)
-  "Transcode HORIZONTAL-RULE element into Markdown format.
+  "Transcode HORIZONTAL-RULE element into TiddlyWiki format.
 CONTENTS is the horizontal rule contents.  INFO is a plist used
 as a communication channel."
   "---")
@@ -237,7 +223,7 @@ as a communication channel."
 ;;;; Italic
 
 (defun org-tw-italic (italic contents info)
-  "Transcode ITALIC object into Markdown format.
+  "Transcode ITALIC object into TiddlyWiki format.
 CONTENTS is the text within italic markup.  INFO is a plist used
 as a communication channel."
   (format "*%s*" contents))
@@ -246,7 +232,7 @@ as a communication channel."
 ;;;; Item
 
 (defun org-tw-item (item contents info)
-  "Transcode ITEM element into Markdown format.
+  "Transcode ITEM element into TiddlyWiki format.
 CONTENTS is the item contents.  INFO is a plist used as
 a communication channel."
   (let* ((type (org-element-property :type (org-export-get-parent item)))
@@ -274,7 +260,7 @@ a communication channel."
 ;;;; Line Break
 
 (defun org-tw-line-break (line-break contents info)
-  "Transcode LINE-BREAK object into Markdown format.
+  "Transcode LINE-BREAK object into TiddlyWiki format.
 CONTENTS is nil.  INFO is a plist used as a communication
 channel."
   "  \n")
@@ -283,7 +269,7 @@ channel."
 ;;;; Link
 
 (defun org-tw-link (link contents info)
-  "Transcode LINE-BREAK object into Markdown format.
+  "Transcode LINE-BREAK object into TiddlyWiki format.
 CONTENTS is the link's description.  INFO is a plist used as
 a communication channel."
   (let ((link-org-files-as-tw
@@ -358,7 +344,7 @@ a communication channel."
 ;;;; Paragraph
 
 (defun org-tw-paragraph (paragraph contents info)
-  "Transcode PARAGRAPH element into Markdown format.
+  "Transcode PARAGRAPH element into TiddlyWiki format.
 CONTENTS is the paragraph contents.  INFO is a plist used as
 a communication channel."
   (let ((first-object (car (org-element-contents paragraph))))
@@ -371,7 +357,7 @@ a communication channel."
 ;;;; Plain List
 
 (defun org-tw-plain-list (plain-list contents info)
-  "Transcode PLAIN-LIST element into Markdown format.
+  "Transcode PLAIN-LIST element into TiddlyWiki format.
 CONTENTS is the plain-list contents.  INFO is a plist used as
 a communication channel."
   contents)
@@ -380,7 +366,7 @@ a communication channel."
 ;;;; Plain Text
 
 (defun org-tw-plain-text (text info)
-  "Transcode a TEXT string into Markdown format.
+  "Transcode a TEXT string into TiddlyWiki format.
 TEXT is the string to transcode.  INFO is a plist holding
 contextual information."
   (when (plist-get info :with-smart-quotes)
@@ -406,7 +392,7 @@ contextual information."
 ;;;; Quote Block
 
 (defun org-tw-quote-block (quote-block contents info)
-  "Transcode QUOTE-BLOCK element into Markdown format.
+  "Transcode QUOTE-BLOCK element into TiddlyWiki format.
 CONTENTS is the quote-block contents.  INFO is a plist used as
 a communication channel."
   (replace-regexp-in-string
@@ -417,7 +403,7 @@ a communication channel."
 ;;;; Section
 
 (defun org-tw-section (section contents info)
-  "Transcode SECTION element into Markdown format.
+  "Transcode SECTION element into TiddlyWiki format.
 CONTENTS is the section contents.  INFO is a plist used as
 a communication channel."
   contents)
@@ -426,7 +412,7 @@ a communication channel."
 ;;;; Template
 
 (defun org-tw-inner-template (contents info)
-  "Return body of document after converting it to Markdown syntax.
+  "Return body of document after converting it to TiddlyWiki syntax.
 CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
   ;; Make sure CONTENTS is separated from table of contents and
@@ -434,7 +420,7 @@ holding export options."
   (org-trim (org-html-inner-template (concat "\n" contents "\n") info)))
 
 (defun org-tw-template (contents info)
-  "Return complete document string after Markdown conversion.
+  "Return complete document string after TiddlyWiki conversion.
 CONTENTS is the transcoded contents string.  INFO is a plist used
 as a communication channel."
   contents)
@@ -444,8 +430,8 @@ as a communication channel."
 ;;; Interactive function
 
 ;;;###autoload
-(defun org-tw-export-as-markdown (&optional async subtreep visible-only)
-  "Export current buffer to a Markdown buffer.
+(defun org-tw-export-as-tiddlywiki (&optional async subtreep visible-only)
+  "Export current buffer to a TiddlyWiki buffer.
 
 If narrowing is active in the current buffer, only export its
 narrowed part.
@@ -472,17 +458,17 @@ non-nil."
 
 ;;;###autoload
 (defun org-tw-convert-region-to-tw ()
-  "Assume the current region has org-mode syntax, and convert it to Markdown.
+  "Assume the current region has org-mode syntax, and convert it to TiddlyWiki.
 This can be used in any buffer.  For example, you can write an
-itemized list in org-mode syntax in a Markdown buffer and use
+itemized list in org-mode syntax in a TiddlyWiki buffer and use
 this command to convert it."
   (interactive)
   (org-export-replace-region-by 'md))
 
 
 ;;;###autoload
-(defun org-tw-export-to-markdown (&optional async subtreep visible-only)
-  "Export current buffer to a Markdown file.
+(defun org-tw-export-to-tiddlywiki (&optional async subtreep visible-only)
+  "Export current buffer to a TiddlyWiki file.
 
 If narrowing is active in the current buffer, only export its
 narrowed part.

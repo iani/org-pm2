@@ -13,3 +13,23 @@ Backup of edited sidebar tiddler:
 :PROPERTIES:
 :DATE:     <2016-03-11 Fri 12:10>
 :END:
+
+* Multi-value TIDDLER property
+:PROPERTIES:
+:TIDDLER:  adf 1234bcd
+:END:
+
+#+BEGIN_SRC emacs-lisp
+(char-or-string-p (org-entry-get (point) "TIDDLER"))
+#+END_SRC
+
+#+RESULTS:
+: t
+
+#+BEGIN_SRC emacs-lisp
+(split-string (org-entry-get (point) "TIDDLER"))
+#+END_SRC
+
+#+RESULTS:
+| adf | 1234bcd |
+
