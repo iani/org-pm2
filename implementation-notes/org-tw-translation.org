@@ -16,7 +16,7 @@ Backup of edited sidebar tiddler:
 
 * Multi-value TIDDLER property
 :PROPERTIES:
-:TIDDLER:  adf 1234bcd
+:TIDDLER:  adf 1234bcd x
 :END:
 
 #+BEGIN_SRC emacs-lisp
@@ -33,3 +33,69 @@ Backup of edited sidebar tiddler:
 #+RESULTS:
 | adf | 1234bcd |
 
+#+BEGIN_SRC emacs-lisp
+(member "x" (split-string (org-entry-get (point) "TIDDLER")))
+#+END_SRC
+
+#+RESULTS:
+| x |
+
+#+BEGIN_SRC emacs-lisp
+(require 'dash)
+(-contains? (split-string (org-entry-get (point) "TIDDLER")) "adf")
+#+END_SRC
+
+#+RESULTS:
+: t
+
+* Github account+repo guessing
+:PROPERTIES:
+:DATE:     <2016-03-14 Mon 11:04>
+:END:
+
+** User login name
+
+#+BEGIN_SRC emacs-lisp
+(user-login-name)
+#+END_SRC
+
+#+RESULTS:
+: iani
+
+** Current directory
+
+#+BEGIN_SRC emacs-lisp
+(file-name-nondirectory (directory-file-name (file-name-directory (buffer-file-name))))
+#+END_SRC
+
+#+RESULTS:
+: implementation-notes
+
+** Full Github repo address
+
+#+BEGIN_SRC emacs-lisp
+  (concat
+   "git@github.com:"
+   (user-login-name)
+   "/"
+   (file-name-nondirectory
+    (directory-file-name (file-name-directory (buffer-file-name))))
+   ".git")
+#+END_SRC
+
+#+RESULTS:
+: git@github.com:iani/implementation-notes.git
+
+** Read github repo address
+
+#+BEGIN_SRC emacs-lisp
+  (read-string
+   "Enter github repository:"
+   (concat
+    "git@github.com:"
+    (user-login-name)
+    "/"
+    (file-name-nondirectory
+     (directory-file-name (file-name-directory (buffer-file-name))))
+    ".git"))
+#+END_SRC
