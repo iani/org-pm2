@@ -44,10 +44,10 @@ This variable can be set to either `atx' or `setext'."
   :export-block '("TW" "TIDDLYWIKI")
   :filters-alist '((:filter-parse-tree . org-tw-separate-elements))
   :menu-entry
-  '(?m "Export to TiddlyWiki"
+  '(?w "Export to TiddlyWiki"
        ((?M "To temporary buffer"
 	    (lambda (a s v b) (org-tw-export-as-tiddlywiki a s v)))
-	(?m "To file" (lambda (a s v b) (org-tw-export-to-tiddlywiki a s v)))
+	(?w "To file" (lambda (a s v b) (org-tw-export-to-tiddlywiki a s v)))
 	(?o "To file and open"
 	    (lambda (a s v b)
 	      (if a (org-tw-export-to-tiddlywiki t s v)
@@ -123,7 +123,7 @@ Assume BACKEND is `md'."
   "Transcode BOLD object into TiddlyWiki format.
 CONTENTS is the text within bold markup.  INFO is a plist used as
 a communication channel."
-  (format "**%s**" contents))
+  (format "''%s''" contents))
 
 
 ;;;; Code and Verbatim
@@ -133,12 +133,14 @@ a communication channel."
 CONTENTS is nil.  INFO is a plist used as a communication
 channel."
   (let ((value (org-element-property :value verbatim)))
-    (format (cond ((not (string-match "`" value)) "`%s`")
-		  ((or (string-match "\\``" value)
-		       (string-match "`\\'" value))
-		   "`` %s ``")
-		  (t "``%s``"))
-	    value)))
+    (format
+     ;; (cond ((not (string-match "`" value)) "`%s`")
+	 ;;      ((or (string-match "\\``" value)
+	 ;;           (string-match "`\\'" value))
+	 ;;       "`` %s ``")
+	 ;;      (t "``%s``"))
+     "{{{%s}}}"
+     value)))
 
 
 ;;;; Example Block and Src Block
@@ -147,10 +149,12 @@ channel."
   "Transcode EXAMPLE-BLOCK element into TiddlyWiki format.
 CONTENTS is nil.  INFO is a plist used as a communication
 channel."
-  (replace-regexp-in-string
-   "^" "    "
-   (org-remove-indentation
-    (org-export-format-code-default example-block info))))
+  ;; (replace-regexp-in-string
+  ;;  "^" "    "
+  ;;  (org-remove-indentation
+  ;;   (org-export-format-code-default example-block info)))
+  (format "{{{\n%s\n}}}" example-block)
+  )
 
 
 ;;;; Headline
@@ -161,58 +165,59 @@ CONTENTS is the headline contents.  INFO is a plist used as
 a communication channel."
   (unless (org-element-property :footnote-section-p headline)
     (let* ((level (org-export-get-relative-level headline info))
-	   (title (org-export-data (org-element-property :title headline) info))
-	   (todo (and (plist-get info :with-todo-keywords)
-		      (let ((todo (org-element-property :todo-keyword
-							headline)))
-			(and todo (concat (org-export-data todo info) " ")))))
-	   (tags (and (plist-get info :with-tags)
-		      (let ((tag-list (org-export-get-tags headline info)))
-			(and tag-list
-			     (format "     :%s:"
-				     (mapconcat 'identity tag-list ":"))))))
-	   (priority
-	    (and (plist-get info :with-priority)
-		 (let ((char (org-element-property :priority headline)))
-		   (and char (format "[#%c] " char)))))
-	   (anchor
-	    (when (plist-get info :with-toc)
-	      (org-html--anchor
-	       (or (org-element-property :CUSTOM_ID headline)
-		   (concat "sec-"
-			   (mapconcat 'number-to-string
-				      (org-export-get-headline-number
-				       headline info) "-"))))))
-	   ;; Headline text without tags.
-	   (heading (concat todo priority title)))
+           (title (org-export-data (org-element-property :title headline) info))
+           (todo (and (plist-get info :with-todo-keywords)
+                      (let ((todo (org-element-property :todo-keyword
+                                                        headline)))
+                        (and todo (concat (org-export-data todo info) " ")))))
+           (tags (and (plist-get info :with-tags)
+                      (let ((tag-list (org-export-get-tags headline info)))
+                        (and tag-list
+                             (format "     :%s:"
+                                     (mapconcat 'identity tag-list ":"))))))
+           (priority
+            (and (plist-get info :with-priority)
+                 (let ((char (org-element-property :priority headline)))
+                   (and char (format "[#%c] " char)))))
+           (anchor
+            (when (plist-get info :with-toc)
+              (org-html--anchor
+               (or (org-element-property :CUSTOM_ID headline)
+                   (concat "sec-"
+                           (mapconcat 'number-to-string
+                                      (org-export-get-headline-number
+                                       headline info) "-"))))))
+           ;; Headline text without tags.
+           (heading (concat todo priority title)))
       (cond
        ;; Cannot create a headline.  Fall-back to a list.
        ((or (org-export-low-level-p headline info)
-	    (not (memq org-tw-headline-style '(atx setext)))
-	    (and (eq org-tw-headline-style 'atx) (> level 6))
-	    (and (eq org-tw-headline-style 'setext) (> level 2)))
-	(let ((bullet
-	       (if (not (org-export-numbered-headline-p headline info)) "-"
-		 (concat (number-to-string
-			  (car (last (org-export-get-headline-number
-				      headline info))))
-			 "."))))
-	  (concat bullet (make-string (- 4 (length bullet)) ? ) heading tags
-		  "\n\n"
-		  (and contents
-		       (replace-regexp-in-string "^" "    " contents)))))
+            (not (memq org-tw-headline-style '(atx setext)))
+            (and (eq org-tw-headline-style 'atx) (> level 6))
+            (and (eq org-tw-headline-style 'setext) (> level 2)))
+        (let ((bullet
+               (if (not (org-export-numbered-headline-p headline info)) "-"
+                 (concat (number-to-string
+                          (car (last (org-export-get-headline-number
+                                      headline info))))
+                         "."))))
+          (concat bullet (make-string (- 4 (length bullet)) ? ) heading tags
+                  "\n\n"
+                  (and contents
+                       (replace-regexp-in-string "^" "    " contents)))))
        ;; Use "Setext" style.
        ((eq org-tw-headline-style 'setext)
-	(concat heading tags anchor "\n"
-		(make-string (length heading) (if (= level 1) ?= ?-))
-		"\n\n"
-		contents))
-       ;; Use "atx" style.
-       (t (concat (make-string level ?#) " " heading tags anchor "\n\n" contents))))))
+        (concat heading tags anchor "\n"
+                (make-string (length heading) (if (= level 1) ?= ?-))
+                "\n\n"
+                contents))
+       ;; Use "atx" style.  For TiddlyWiki: ! (instead of # for md)
+       (t (concat (make-string level ?!) " " heading tags anchor "\n\n" contents))))))
 
 
 ;;;; Horizontal Rule
-
+;; same as md.
+;; See: http://tiddlywiki.com/static/Horizontal%2520Rules%2520in%2520WikiText.html
 (defun org-tw-horizontal-rule (horizontal-rule contents info)
   "Transcode HORIZONTAL-RULE element into TiddlyWiki format.
 CONTENTS is the horizontal rule contents.  INFO is a plist used
@@ -226,7 +231,7 @@ as a communication channel."
   "Transcode ITALIC object into TiddlyWiki format.
 CONTENTS is the text within italic markup.  INFO is a plist used
 as a communication channel."
-  (format "*%s*" contents))
+  (format "//%s//" contents))
 
 
 ;;;; Item
@@ -237,14 +242,16 @@ CONTENTS is the item contents.  INFO is a plist used as
 a communication channel."
   (let* ((type (org-element-property :type (org-export-get-parent item)))
 	 (struct (org-element-property :structure item))
-	 (bullet (if (not (eq type 'ordered)) "-"
-		   (concat (number-to-string
-			    (car (last (org-list-get-item-number
-					(org-element-property :begin item)
-					struct
-					(org-list-prevs-alist struct)
-					(org-list-parents-alist struct)))))
-			   "."))))
+	 (bullet (if (not (eq type 'ordered)) "*"
+               ;; (concat (number-to-string
+               ;;          (car (last (org-list-get-item-number
+               ;;                      (org-element-property :begin item)
+               ;;                      struct
+               ;;                      (org-list-prevs-alist struct)
+               ;;                      (org-list-parents-alist struct)))))
+               ;;         ".")
+               "#"
+               )))
     (concat bullet
 	    (make-string (- 4 (length bullet)) ? )
 	    (case (org-element-property :checkbox item)
@@ -277,7 +284,10 @@ a communication channel."
 	  (lambda (raw-path)
 	    ;; Treat links to `file.org' as links to `file.md'.
 	    (if (string= ".org" (downcase (file-name-extension raw-path ".")))
-		(concat (file-name-sans-extension raw-path) ".md")
+            (concat (file-name-sans-extension raw-path)
+                    "" ;; basic internal tiddlywiki link has no extension
+                    ;; ".md"
+                    )
 	      raw-path))))
 	(type (org-element-property :type link)))
     (cond
@@ -453,7 +463,7 @@ Export is done in a buffer named \"*Org MD Export*\", which will
 be displayed when `org-export-show-temporary-export-buffer' is
 non-nil."
   (interactive)
-  (org-export-to-buffer 'md "*Org MD Export*"
+  (org-export-to-buffer 'tw "*Org TW Export*"
     async subtreep visible-only nil nil (lambda () (text-mode))))
 
 ;;;###autoload
@@ -463,7 +473,7 @@ This can be used in any buffer.  For example, you can write an
 itemized list in org-mode syntax in a TiddlyWiki buffer and use
 this command to convert it."
   (interactive)
-  (org-export-replace-region-by 'md))
+  (org-export-replace-region-by 'tw))
 
 
 ;;;###autoload
@@ -488,7 +498,7 @@ contents of hidden elements.
 
 Return output file's name."
   (interactive)
-  (let ((outfile (org-export-output-file-name ".md" subtreep)))
+  (let ((outfile (org-export-output-file-name ".tid" subtreep)))
     (org-export-to-file 'md outfile async subtreep visible-only)))
 
 

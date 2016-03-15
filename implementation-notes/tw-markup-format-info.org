@@ -1,0 +1,173 @@
+
+* version 
+:PROPERTIES:
+:DATE:     <2016-03-15 Tue 17:12>
+:END:
+from: http://tiddlywiki.tiddlyspace.com/TiddlyWiki%20Markup
+
+** Styles
+- bold ::	''bold'' (two single-quotes)
+- italics ::	//italics//
+- bold italics ::	''//bold italics//''
+- underline ::	__underline__
+- strikethrough ::	--strikethrough--
+- superscript ::	super^^script^^
+- subscript ::	sub~~script~~
+- highlight ::	@@highlight@@
+- foo :: — bar	foo -- bar — two dashes create an Em dash
+
+** Code / Monospaced Text
+
+*** Inline Code
+monospaced text	{{{mono space text}}}
+
+*** Code Block
+{{{
+multi-line
+code block
+}}}
+{{{
+multi-line
+code block
+}}}
+
+** Avoiding Wikification
+
+Use """ text """
+or <nowiki> text </nowiki>
+
+to output text as-is (escaping), enclose it in three double quotes or use the <nowiki> markup
+plain//text	"""plain//text"""
+not__wikified	<nowiki>not__wikified</nowiki>
+
+** Headings
+start a new line with one or more exclamation points to create headings
+!Heading 1
+!!Heading 2
+!!!Heading 3
+!!!!Heading 4
+!!!!!Heading 5
+
+** Lists
+
+*** Unordered Lists
+*item one
+*item two
+**level two
+***level three
+
+*** Ordered Lists
+#item one
+#item two
+##level two
+###level three
+
+*** Definition List
+
+;term
+:definition
+
+*** Mixed Lists
+ordered
+unordered
+term
+definition
+# ordered
+#* unordered
+#*;term
+#*:definition
+
+** Blockquotes
+
+*** Nested Blockquotes
+blockquote
+level two
+level three
+>blockquote
+>>level two
+>>>level three
+Multi-line Blockquotes
+multi-line
+blockquote
+<<<
+multi-line
+blockquote
+<<<
+
+*** Mixed Blockquotes
+foo
+inner foo, level 1
+inner foo, level 2
+more foo
+<<<
+foo
+> inner foo, level 1
+>> inner foo, level 2
+more foo
+<<<
+
+** Links
+*** Internal Links
+
+**** WikiWord	WikiWord
+
+**** NoLink	~NoLink — a tilde ~ prevents automatic WikiWord links
+
+**** basic internal links
+: Plain Link	[[Plain Link]]
+: Pretty Link	[[Pretty Link|Tiddler Name]]
+
+*** External Links
+A valid URL is automatically rendered as an external link.
+http://www.tiddlywiki.com	http://www.tiddlywiki.com
+Pretty External Link	[[Pretty External Link|http://www.tiddlywiki.com]]
+Filesystem Links
+You can, of course, use file system links both as plain or pretty links.
+Windows Network Path	[[file://///server/share]]
+Windows Local	[[file:///c:/folder/file]]
+Linux/Unix Local	[[file:///folder/file]]
+Relative Path (Subfolder)	[[folder/file]]
+
+*** Images
+In general, image files are external to a TiddlyWiki.
+	[img[path/image.jpg]]
+aligned right  	[>img[path/image.jpg]]
+  aligned left	[<img[path/image.jpg]]
+w/ internal link 	[img[path/image.jpg][TiddlerName]]
+w/ external link 	[img[path/image.jpg][TiddlyWiki|http://www.tiddlywiki.com]]
+Gradients
+  vertical or horizontal
+  see gradient macro>>
+<<gradient horiz #faa #afa #aaf>>wiki text>>
+
+** Tables
+
+|cssClass|k
+|!heading column 1|!heading column 2|h
+|left aligned | right aligned|
+| centered ||
+|>|COLSPAN|
+|ROWSPAN|color:red;red|
+|~|color:green;green|
+|>|footer&trade;|f
+|caption|c
+
+- columns are delimited by a single pipe character (|)
+- a new line creates a new row
+- to merge a cell with the one to its right (colspan) use a greater than (>)
+- to merge a cell with the one above (rowspan) use a tilde (~)
+- append a h after the last | to turn the row into a header row
+- prepend a row |someClass|k to define a css class for the entire table
+- add a line |caption|c to define a caption for the table
+- valid css directly following the pipe character finished with a semi-colon is applied to the cell
+
+** Custom Styles
+a @@highlight@@ element can accept CSS syntax to directly style text.
+green coloured	@@color:green;green coloured@@
+Custom CSS Class Wrapper
+You can define a custom css class wrapper, like .button below. By default, the inner text is placed inline into a <span> of said class(s). If you start and end the inner text with a newline, the content is placed in a <div>. Use the StyleSheet to define the css styles applied to the class.
+
+** Embedded HTML
+any
+valid xhtml	<html><span style="padding-right:30px;font-size:2em;">any</span><br /><b>valid</b> <em>xhtml</em></html>
+Embedded <iframe>

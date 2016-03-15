@@ -1,0 +1,26 @@
+15 Mar 2016 10:29
+
+* Steps for exporting a file or section to tiddlywiki
+
+1. Give ID to every section that must be exported as tiddler (this is a permanent change and will be saved with the original file).
+2. Copy entire buffer or section region to new buffer for processing
+3. Switch to the newly copied buffer for export to perform changes that will not be saved
+4. Iterate over every section in the copied buffer doing:
+   1. Mark sections that must be exported as tiddler with COMMENT
+   2. Append numbers to sections where needed, to prevent duplicate names.  For example 2 sections with the same name "conclusion" become "conclusion" and "conclusion 1".
+   3. Append macro for including tiddlers as menu (see here below) to end of current buffer.
+   4. Construct tw header for this buffer.
+   5. Construct file name
+   6. Export as Tiddler
+   7. For each section that was marked as COMMENT and has the TIDDLER property set to correspond to the current buffer (ID or entire file, see explanations elsewhere): 
+      - Export the section by repeating all steps described in this section until no more subsections remain to be exported.
+
+Note: Contents of sections are always exported.  But content of entire file before the first section is not saved.  Review this fact in detail and check implementation.
+
+* Macro for including tiddlers as menu
+
+#+BEGIN_EXAMPLE
+<div class="tc-table-of-contents">
+<<toc-selective-expandable "Name-ID of containing tiddler">>
+</div>
+#+END_EXAMPLE

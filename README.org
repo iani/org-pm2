@@ -17,21 +17,7 @@ TiddlyWiki export and website publishing is implemented in the =org-pm-tw= libra
 
 The library defines one main interactive command, =org-pm-tw-deploy=, which exports a file or section to TiddlyWiki format, renders it to HTML, and then uploads the result as website to github.  This one command alone is sufficient to produce and update websites from any org-mode file or section.
 
-Org-mode files in a directory are exported per default to a directory called =WIKIS=, which is placed in the same directory as the org-mode files: 
-
-#+BEGIN_EXAMPLE
-index.org  # source files
-page1.org
-page2.org
-WIKIS  # folder containing all export files
-    index  # folders containing TiddlyWikis created from the org files
-    page1
-    page2
-    rendered  # folder containing rendered html from the wikis
-        index.html
-        page1.html
-        page2.html
-#+END_EXAMPLE
+Per default, org-mode files in a directory are exported per default to a directory called =WIKIS=, which is placed in the same directory as the org-mode source files.
 
 To export only the current section, call =org-pm-tw-deploy= with a prefix-argument (=C-u=).
 
@@ -134,7 +120,7 @@ tiddlywiki ./readonly --rendertiddler $:/core/save/all ../../../../rendered/rend
 
 - Each TiddlyWiki is stored as a subfolder inside the directory whose path is defined in custom variable =org-pm-wikis=.
 - The default value of =org-pm-wikis= is "WIKIS".
-- The =org-pm-wikis= directory is created in the same directory that contains the org-mode source for the exported wiki.  In this way, each directory that contains org-mode files can be a group of wikis that are exported as html pages to form a website containing many pages. 
+- If the =org-pm-wikis= directory is a relative path such as "WIKIS", then the =org-pm-wikis= directory is created relative the directory that contains the org-mode source for the exported wiki.  In this way, each directory that contains org-mode files can be a group of wikis that are exported as html pages to form a website containing many pages. 
 - The TiddlyWiki source of each wiki is stored in its own folder.
 - The user is prompted to choose or enter the name of the folder before exporting.
 - The name chosen by the user is stored in the org-mode source file to serve as default for future exports.
@@ -149,6 +135,22 @@ tiddlywiki ./readonly --rendertiddler $:/core/save/all ../../../../rendered/rend
     1. The source code (in org-mode).
     2. The TiddlyWiki source code (in tiddler markup format, as single tiddlers, plus all accompanying config files and tiddlers)
     3. The rendered =html= file.
+
+The structure of a repository folder containing org-mode source and wiki-exported sites is: 
+
+#+BEGIN_EXAMPLE
+index.org  # source files
+page1.org
+page2.org
+WIKIS  # folder containing all export files
+    index  # folders containing TiddlyWikis created from the org files
+    page1
+    page2
+    rendered  # folder containing rendered html from the wikis
+        index.html # Rendered html pages from the wikis
+        page1.html
+        page2.html
+#+END_EXAMPLE
 
 * PDF
 :PROPERTIES:

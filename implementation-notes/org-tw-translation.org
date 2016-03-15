@@ -6,13 +6,18 @@
 
 Backup of edited sidebar tiddler: 
 
+#+BEGIN_EXAMPLE
 <$macrocall $name="tabs" tabsList="[all[shadows+tiddlers]tag[$:/tags/SideBar]!has[draft.of]]" default={{$:/config/DefaultSidebarTab}} state="$:/state/tab/sidebar" />
+#+END_EXAMPLE
 
+Other version: 
 
-* Incorpore subsections in tiddler
+* Incorpore subsections in tiddler - as foldable menu list items
 :PROPERTIES:
 :DATE:     <2016-03-11 Fri 12:10>
 :END:
+
+
 
 * Multi-value TIDDLER property
 :PROPERTIES:
