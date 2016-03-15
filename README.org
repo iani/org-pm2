@@ -41,8 +41,8 @@ The first time that the command is called, it asks the user to input the name of
 
 I use the keyboard combination =Meta-p= (Alt-p, Opt-p or Esc-p) as prefix for the 3 interactive commands of the org-pm-tw library.  This is because (a) p is a mnemonic for "publish" and (b) it is not occupied by any other commands in Org mode, which is the only mode concerned.  Thus, the keyboard shortcuts are: 
 
-- Meta-p p :: org-pm-tw-deploy
-- Meta-p d :: org-pm-tw-deploy (alternative)
+- Meta-p d :: org-pm-tw-deploy 
+- Meta-p p :: org-pm-tw-deploy (p for publish, alternative keyboard command for =org-pm-tw-deploy=)
 - Meta-p r :: org-pm-tw-render
 - Meta-p e :: org-pm-tw-export
 - Meta-p u :: org-pm-tw-upload
