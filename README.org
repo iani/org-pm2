@@ -46,6 +46,7 @@ I use the keyboard combination =Meta-p= (Alt-p, Opt-p or Esc-p) as prefix for th
 - Meta-p r :: org-pm-tw-render
 - Meta-p e :: org-pm-tw-export
 - Meta-p u :: org-pm-tw-upload
+- Meta-p t :: org-pm-tw-mark-tiddlers
 - Meta-p l :: org-pm-latex-export (see section on latex below)
 
 Preceding any of the above commands with the prefix argument shortcut (=C-u=) makes them work on the current section of the org-mode file, instead of the entire file. 
@@ -68,6 +69,14 @@ However, it is possible to export subsections of level 2 or lower as independent
 
 Subsections that are exported as Tiddlers are marked by setting the property =TIDDLER= in their properties block.  The value of this property indicates for which export the =TIDDLER= applies.  If the value is =t=, then the subsection will be exported as a Tiddler when the entire file is being exported.  If the value is a different string, then that string is used as an ID to identify the section for which the subsection must be exported as Tiddler.
 
+The command for marking subsections as tiddlers is =org-pm-tw-mark-tiddlers=, and is bound to =Meta-p t=.  
+
+- Meta-p t :: mark current section to be exported as separate tiddler
+- Control-u Meta-p t :: Mark all subsections of relative depth 1 to be exported as tiddlers
+- <Number prefix: n> Meta-p t :: Mark all subsections of relative depth n to be exported as tiddlers
+- Meta-p T :: unmark current section - prevent from exporting as separate tiddler
+- Control-u Meta-p T :: Unmark all subsections of relative depth 1 from being exported as tiddlers
+- <Number prefix: n> Meta-p T :: Unmark all subsections of relative depth n from being exported as tiddlers
 
 ** How to specify the github repository for a folder
 
