@@ -12,8 +12,10 @@
                   (stringp byte-compile-dest-file))
              (cons (file-name-directory byte-compile-dest-file) load-path)
            load-path)))
+    ;; (message "THE LOAD PATH IS %s" load-path)
     (require 'org-pm-util)
     (require 'org-pm-tw)
-    (require 'org-pm-latex)))
+    (require 'org-pm-latex)
+    (require 'ox-tw)))
 (provide 'org-pm2)
 ;;; org-pm2.el ends here

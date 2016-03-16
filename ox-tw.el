@@ -468,9 +468,9 @@ non-nil."
 
 ;;;###autoload
 (defun org-tw-convert-region-to-tw ()
-  "Assume the current region has org-mode syntax, and convert it to TiddlyWiki.
+  "Assume current region has `org-mode' syntax, and convert it to TiddlyWiki.
 This can be used in any buffer.  For example, you can write an
-itemized list in org-mode syntax in a TiddlyWiki buffer and use
+itemized list in `org-mode' syntax in a TiddlyWiki buffer and use
 this command to convert it."
   (interactive)
   (org-export-replace-region-by 'tw))
