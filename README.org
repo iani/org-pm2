@@ -53,7 +53,7 @@ Per default, each top level section of the org-mode document becomes a separate 
 
 However, it is possible to export subsections of level 2 or lower as independent tiddlers.  Such subsections will be incorporated in the tiddler of the section of which they are immediate children, and will be listed in a multi-level dynamically foldable menu in the main body of the tiddler. 
 
-Subsections that are exported as Tiddlers are marked by setting the property =TIDDLER= in their properties block.  The value of this property indicates for which export the =TIDDLER= applies.  If the value is =t=, then the subsection will be exported as a Tiddler when the entire file is being exported.  If the value is a different string, then that string is used as an ID to identify the section for which the subsection must be exported as Tiddler.
+Subsections that are exported as Tiddlers are marked by setting the property =TIDDLER= in their properties block.  The value of this property indicates for which export the =TIDDLER= applies.  If the value is =t=, then the subsection will be exported as a Tiddler when the entire file is being exported.  If the value is a different string, then that string is used as an ID to identify the section for which the subsection must be exported as Tiddler (Only one subsection per Tiddler can be specified - TODO: store a list of values in the property to enable settings for more than one case per subtree).
 
 The command for marking subsections as tiddlers is =org-pm-tw-mark-tiddlers=, and is bound to =Meta-p t=.  
 
