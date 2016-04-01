@@ -179,3 +179,7 @@ PDF exports are stored in the org-attachments directory
 - Entire-file exports are saved in subdirectory "PDFs" of the attachments directory.  The PDF files are named after the name of the org-source file.
 - Subtree exports are saved as regular attachments to the subtree's attachment dir.  The PDF file is named after the heading of the subtree, but the user is prompted to edit the file name in the minibuffer before starting the export.
 
+* ROADMAP
+:PROPERTIES:
+:DATE:     <2016-04-01 Fri 22:53>
+:END:
